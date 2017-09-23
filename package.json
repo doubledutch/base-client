@@ -1,0 +1,22 @@
+{
+  "name": "@doubledutch/base-client",
+  "version": "1.0.0",
+  "description": "Base DoubleDutch client upon which React Native, etc. clients are built",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "doubledutch",
+    "client"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/doubledutch/base-client"
+  },
+  "author": "DoubleDutch",
+  "contributors": [
+    "Adam Liechty <adam@doubledutch.me>"
+  ],
+  "license": "ISC"
+}
