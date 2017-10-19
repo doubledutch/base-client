@@ -3,7 +3,7 @@ export function prettifyAttendee(user) {
   return deleteUndefinedKeys({
     id: user.UserId,
     identifier: user.UserIdentifierId,
-    fisrtName: user.FirstName,
+    firstName: user.FirstName,
     lastName: user.LastName,
     title: user.Title,
     company: user.Company,
