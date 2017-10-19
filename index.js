@@ -1,11 +1,19 @@
+import api, { emulatedApi } from './api'
+import { prettifyAttendee, prettifyEvent } from './transforms'
+
 export default function makeClient(DD) {
+  function getToken() {
+    return promisify(DD.requestAccessToken)
+  }
+
   const client = {
-    currentEvent: DD.currentEvent,
-    currentUser: DD.currentUser,
+    currentEvent: prettifyEvent(DD.currentEvent),
+    currentUser: prettifyAttendee(DD.currentUser),
     primaryColor: DD.primaryColor,
     region: getRegion(DD.apiRootURL),
     setTitle: DD.setTitle,
-    getToken() { return promisify(DD.requestAccessToken) }
+    getToken,
+    api: DD.isEmulated ? emulatedApi() : api(getToken, DD.apiRootURL, DD.currentEvent.EventId)
   }
 
   return client
