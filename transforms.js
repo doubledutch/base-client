@@ -1,6 +1,6 @@
 export function prettifyAttendee(user) {
   if (!user) return null
-  return {
+  return deleteUndefinedKeys({
     id: user.UserId,
     identifier: user.UserIdentifierId,
     fisrtName: user.FirstName,
@@ -13,16 +13,21 @@ export function prettifyAttendee(user) {
     twitter: user.TwitterUserName,
     linkedin: user.LinkedInId,
     facebook: user.FacebookUserId
-  }
+  })
 }
 
 export function prettifyEvent(event) {
   if (!event) return null
-  return {
+  return deleteUndefinedKeys({
     id: event.EventId,
     startDate: event.StartDate,
     endDate: event.EndDate,
     description: event.Description,
     appId: event.BundleId
-  }
+  })
+}
+
+function deleteUndefinedKeys(obj) {
+  Object.keys(obj).forEach(key => typeof obj[key] === 'undefined' && delete obj[key])
+  return obj
 }
