@@ -20,6 +20,7 @@ export function prettifyEvent(event) {
   if (!event) return null
   return deleteUndefinedKeys({
     id: event.EventId,
+    name: event.Name,
     startDate: event.StartDate,
     endDate: event.EndDate,
     description: event.Description,
