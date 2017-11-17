@@ -13,6 +13,7 @@ export default function makeClient(DD) {
     region: getRegion(DD.apiRootURL),
     setTitle: DD.setTitle,
     getToken,
+    openURL: DD.openURL,
     api: DD.isEmulated ? emulatedApi() : api(getToken, DD.apiRootURL, DD.currentEvent.EventId),
     _b: DD
   }
