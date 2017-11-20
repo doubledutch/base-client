@@ -6,7 +6,10 @@ export default function makeClient(DD) {
     return promisify(DD.requestAccessToken)
   }
 
+  const ddapi = DD.isEmulated ? emulatedApi() : api(getToken, DD.apiRootURL, DD.currentEvent.EventId)
+
   const client = {
+    ...ddapi, // merge all the functions that expose the DD API to this `client` object.
     currentEvent: prettifyEvent(DD.currentEvent),
     currentUser: prettifyAttendee(DD.currentUser),
     primaryColor: DD.primaryColor,
@@ -14,7 +17,6 @@ export default function makeClient(DD) {
     setTitle: DD.setTitle,
     getToken,
     openURL: DD.openURL,
-    api: DD.isEmulated ? emulatedApi() : api(getToken, DD.apiRootURL, DD.currentEvent.EventId),
     _b: DD
   }
 

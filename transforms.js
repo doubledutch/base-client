@@ -10,6 +10,7 @@ export function prettifyAttendee(user) {
     email: user.EmailAddress,
     username: user.UserName,
     image: user.ImageUrl,
+    userGroupIds: user.UserGroups || [],
     twitter: user.TwitterUserName,
     linkedin: user.LinkedInId,
     facebook: user.FacebookUserId
@@ -25,6 +26,62 @@ export function prettifyEvent(event) {
     endDate: event.EndDate,
     description: event.Description,
     appId: event.BundleId
+  })
+}
+
+export function prettifyCustomItem(item) {
+  if (!item) return null
+  return deleteUndefinedKeys({
+    id: item.Id,
+    name: item.Name,
+    image: item.ImageUrl,
+    description: item.Description
+  })
+}
+
+export function prettifyExhibitor(item) {
+  if (!item) return null
+  return deleteUndefinedKeys({
+    id: item.Id,
+    name: item.Name,
+    image: item.ImageUrl,
+    description: item.Description,
+    website: item.Website,
+    facebook: item.FacebookUrl,
+    linkedin: item.LinkedInUrl,
+    twitter: item.Twitter,
+    email: item.EmailAddress,
+    phone: item.PhoneNumber
+  })
+}
+
+export function prettifySpeaker(item) {
+  if (!item) return null
+  return deleteUndefinedKeys({
+    id: item.Id,
+    firstName: item.FirstName,
+    lastName: item.LastName,
+    image: item.ImageUrl,
+    description: item.Description,
+    website: item.Website,
+    facebook: item.FacebookUrl,
+    linkedin: item.LinkedInUrl,
+    twitter: item.Twitter,
+    email: item.EmailAddress,
+    phone: item.PhoneNumber
+  })
+}
+
+export function prettifySession(item) {
+  if (!item) return null
+  return deleteUndefinedKeys({
+    id: item.Id,
+    name: item.Name,
+    image: item.ImageUrl,
+    description: item.Description,
+    location: item.Location,
+    start: item.StartDate,
+    end: item.EndDate
   })
 }
 
