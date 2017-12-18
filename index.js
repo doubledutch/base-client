@@ -34,4 +34,5 @@ function getRegion(apiRoot) {
   if (apiRoot.startsWith('https://api.eu.doubledutch.me')) return 'eu'
   if (apiRoot.startsWith('https://soep.doubledutch.me')) return 'soep'
   if (apiRoot.startsWith('https://qa.api.doubledutch.me')) return 'qa'
+  if (apiRoot.startsWith('https://purple.api.doubledutch.me')) return 'purple'
 }
