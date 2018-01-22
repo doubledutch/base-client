@@ -1,7 +1,8 @@
 export function prettifyAttendee(user) {
   if (!user) return null
+  const id = user.UserId || user.Id
   return deleteUndefinedKeys({
-    id: user.UserId || user.Id,
+    id: id && `${id}`,
     identifier: user.UserIdentifierId,
     firstName: user.FirstName,
     lastName: user.LastName,
