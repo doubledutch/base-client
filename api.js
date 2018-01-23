@@ -93,6 +93,28 @@ const emulatedUsers = {
     Title: 'Character',
     Company: 'Les Misérables',
     TwitterUserName: 'lesmisofficial'
+  },
+  '1234': {
+    Id: '1234',
+    ImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Ebcosette.jpg',
+    UserName: 'cosette@thenardier.hotel',
+    EmailAddress: 'cosette@thenardier.hotel',
+    UniqueIdentifier: 'cosette1862',
+    FirstName: 'Cosette',
+    LastName: 'Pontmercy',
+    Title: 'Character',
+    Company: 'Les Misérables'
+  },
+  '5678': {
+    Id: '5678',
+    ImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Marius_sees_Cosette.jpg',
+    UserName: 'marius@revolution.fr',
+    EmailAddress: 'marius@revolution.fr',
+    UniqueIdentifier: 'marius1862',
+    FirstName: 'Marius',
+    LastName: 'Pontmercy',
+    Title: 'Character',
+    Company: 'Les Misérables'
   }
 }
 
