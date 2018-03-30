@@ -116,6 +116,7 @@ const emulatedUsers = {
     LastName: 'Valjean',
     Title: 'Character',
     Company: 'Les Misérables',
+    TierId: 123,
     TwitterUserName: 'lesmisofficial'
   },
   '1234': {
