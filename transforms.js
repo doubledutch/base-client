@@ -27,6 +27,7 @@ export function prettifyAttendee(user) {
     email: user.EmailAddress,
     username: user.UserName,
     image: user.ImageUrl,
+    score: user.Score,
     userGroupIds: user.UserGroups || [],
     tierId: user.TierId || 'default',
     twitter: user.TwitterUserName,

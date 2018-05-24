@@ -45,6 +45,10 @@ export default function api(getToken, rootUrl, eventId) {
     getAttendees() {
       return get('users/').then(val => val.map(prettifyAttendee))
     },
+    getLeaderboardAttendees(count) {
+      count = +count || 20
+      return get(`users/?count=${count}&so=Score&sd=Descending`).then(val => val.map(prettifyAttendee))
+    },
 
     // Deprecated aliases for getAttendee(s)
     getUser(userId) {
@@ -86,6 +90,11 @@ export function emulatedApi() {
     },
     getUsers() {
       return Promise.resolve(Object.keys(emulatedUsers).map(id => prettifyAttendee(emulatedUsers[id])))
+    },
+    getLeaderboardAttendees(count) {
+      count = +count || 20
+      const attendees = Object.keys(emulatedUsers).map(id => prettifyAttendee(emulatedUsers[id]))
+      return Promise.resolve(attendees.slice(0,count).map((a,i) => ({...a, score: 50 - 7*i})))
     },
     getCustomItems() {
       return Promise.resolve(Object.keys(emulatedCustomItems).map(id => prettifyCustomItem(emulatedCustomItems[id])))
