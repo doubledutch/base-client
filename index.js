@@ -22,6 +22,14 @@ export default function makeClient(DD) {
     return promisify(DD.requestAccessToken)
   }
 
+  // Use the native binding function, or fall back to the static object if the binding function isn't available.
+  function getCurrentUser() {
+    return promisify(DD.getCurrentUser || (cb => cb(null, DD.currentUser))).then(prettifyAttendee)
+  }
+  function getCurrentEvent() {
+    return promisify(DD.getCurrentEvent || (cb => cb(null, DD.currentEvent))).then(prettifyEvent)
+  }
+
   const ddapi = DD.isEmulated ? emulatedApi() : api(getToken, DD.apiRootURL, DD.currentEvent.EventId)
 
   const client = {
@@ -33,6 +41,10 @@ export default function makeClient(DD) {
     setTitle: DD.setTitle,
     getToken,
     openURL: DD.openURL,
+    getCurrentUser,
+    getCurrentEvent,
+    logOut: DD.logOut,
+    dismissLandingPage: DD.dismissLandingPage,
     _b: DD
   }
 
@@ -48,7 +60,6 @@ function promisify(fn, ...args) {
 function getRegion(apiRoot) {
   if (apiRoot.startsWith('https://api.doubledutch.me')) return 'us'
   if (apiRoot.startsWith('https://api.eu.doubledutch.me')) return 'eu'
-  if (apiRoot.startsWith('https://soep.doubledutch.me')) return 'soep'
   if (apiRoot.startsWith('https://qa.api.doubledutch.me')) return 'qa'
   if (apiRoot.startsWith('https://purple.api.doubledutch.me')) return 'purple'
 }
