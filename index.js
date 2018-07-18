@@ -21,6 +21,9 @@ export default function makeClient(DD) {
   function getToken() {
     return promisify(DD.requestAccessToken)
   }
+  function refreshToken() {
+    return promisify(DD.refreshAccessToken || DD.requestAccessToken) // Refresh, or fall back to last token if unavailable.
+  }
 
   // Use the native binding function, or fall back to the static object if the binding function isn't available.
   function getCurrentUser() {
@@ -40,6 +43,7 @@ export default function makeClient(DD) {
     region: getRegion(DD.apiRootURL),
     setTitle: DD.setTitle,
     getToken,
+    refreshToken,
     openURL: DD.openURL,
     getCurrentUser,
     getCurrentEvent,
