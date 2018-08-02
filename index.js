@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import api, { emulatedApi } from './api'
+import api, {emulatedApi} from './api'
+import cmsApi, {emulatedCmsApi} from './cmsApi'
 import { prettifyAttendee, prettifyEvent } from './transforms'
 
 export default function makeClient(DD) {
@@ -33,14 +34,17 @@ export default function makeClient(DD) {
     return promisify(DD.getCurrentEvent || (cb => cb(null, DD.currentEvent))).then(prettifyEvent)
   }
 
+  const region = getRegion(DD.apiRootURL)
   const ddapi = DD.isEmulated ? emulatedApi() : api(getToken, DD.apiRootURL, DD.currentEvent.EventId)
+  const ddCmsApi = DD.isEmulated ? emulatedCmsApi() : cmsApi(getToken, region, DD.currentEvent.EventId)
 
   const client = {
-    ...ddapi, // merge all the functions that expose the DD API to this `client` object.
+    ...ddCmsApi,  // merge all the functions that expose the mobile and CMS APIs
+    ...ddapi,     // to this `client` object.
     currentEvent: prettifyEvent(DD.currentEvent),
     currentUser: prettifyAttendee(DD.currentUser),
     primaryColor: DD.primaryColor,
-    region: getRegion(DD.apiRootURL),
+    region,
     setTitle: DD.setTitle,
     getToken,
     refreshToken,

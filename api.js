@@ -18,11 +18,14 @@ import { prettifyAttendee, prettifyCustomItem, prettifyExhibitor, prettifySessio
 
 export default function api(getToken, rootUrl, eventId) {
   if (!rootUrl.endsWith('/')) rootUrl = rootUrl + '/'
-  function get(url) {
+
+  function mobileApi(method, url, body) {
     url = `${rootUrl}${url}${url.indexOf('?') < 0 ? '?' : '&'}isbundlecredentials=true&applicationid=${eventId}`
     return getToken()
     .then(token => fetch({
       url,
+      method,
+      body,
       headers: {
         authorization: `Bearer ${token}`,
         'X-DDAPI-Version':'7.0.0.0'
@@ -37,6 +40,8 @@ export default function api(getToken, rootUrl, eventId) {
       }
     })
   }
+
+  const get = url => mobileApi('GET', url)
 
   return {
     getAttendee(id) {
@@ -79,7 +84,7 @@ async function getItemsOfType(type) {
   const lists = await get('lists/')
   const itemArrays = await Promise.all(lists.filter(x => x.Type === type).map(list => get(`lists/${lists.Id}/items`)))
   return Array.concat.apply(null, itemArrays)
-}
+}  
 
 export function emulatedApi() {
   return {
