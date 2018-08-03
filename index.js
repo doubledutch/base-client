@@ -18,7 +18,7 @@ import api, {emulatedApi} from './api'
 import cmsApi, {emulatedCmsApi} from './cmsApi'
 import { prettifyAttendee, prettifyEvent } from './transforms'
 
-export default function makeClient(DD) {
+export default function makeClient(DD, postBase64File) {
   function getToken() {
     return promisify(DD.requestAccessToken)
   }
@@ -36,7 +36,7 @@ export default function makeClient(DD) {
 
   const region = getRegion(DD.apiRootURL)
   const ddapi = DD.isEmulated ? emulatedApi() : api(getToken, DD.apiRootURL, DD.currentEvent.EventId)
-  const ddCmsApi = DD.isEmulated ? emulatedCmsApi() : cmsApi(getToken, region, DD.currentEvent.EventId)
+  const ddCmsApi = DD.isEmulated ? emulatedCmsApi() : cmsApi(getToken, region, DD.currentEvent.EventId, postBase64File)
 
   const client = {
     ...ddCmsApi,  // merge all the functions that expose the mobile and CMS APIs

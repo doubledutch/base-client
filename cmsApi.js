@@ -16,7 +16,7 @@
 
 import { prettifyAttendee } from './transforms'
 
-export default function api(getToken, region, eventId) {
+export default function api(getToken, region, eventId, postBase64File) {
   const rootUrl = getRootUrl(region)
 
   function cmsApi(method, url, body) {
@@ -49,7 +49,59 @@ export default function api(getToken, region, eventId) {
     deleteExhibitorStaff(exhibitorId, userId) {
       return del(`exhibitors/${exhibitorId}/staff`, userId)
     },
+    updateExhibitorImage(exhibitorId, base64File) {
+      // Upload file, GET exhibitor, point to temp URL of uploaded image, PUT exhibitor.
+      return getToken()
+      .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadimage`, {authorization: `Bearer ${token}`}, base64File))
+      .then(path => {
+        get(`items/${exhibitorId}`)
+        .then(exhib => {
+          exhib.ImageUrl = path
+          return put(`items/${exhibitorId}`, exhib)
+        })
+      })
+    },
+    addExhibitorFile(exhibitorId, base64File) {
+      return getToken()
+      .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadfile`, {authorization: `Bearer ${token}`}, base64File))
+      .then(path => {
+        get(`items/${exhibitorId}`)
+        .then(exhib => {
+          exhib.Links.push({Name: getUniqueFileName(), Url: path})
+          return put(`items/${exhibitorId}`, exhib)
+        })
+      })
+    },
+    renameExhibitorFile(exhibitorId, fileId, name) {
+      if (!fileId) return Promise.reject(new Error('file ID not specified'))
+      get(`items/${exhibitorId}`)
+      .then(exhib => {
+        const link = exhib.Links.filter(x => x.Id == fileId)
+        if (link) {
+          link.Name = name
+          return put(`items/${exhibitorId}`, exhib)
+        }
+        return Promise.reject(new Error('exhibitor link not found'))
+      })
+    },
+    removeExhibitorFile(exhibitorId, fileId) {
+      if (!fileId) return Promise.reject(new Error('file ID not specified'))
+      get(`items/${exhibitorId}`)
+      .then(exhib => {
+        exhib.Links = exhib.Links.filter(x => x.Id != fileId)
+        return put(`items/${exhibitorId}`, exhib)
+      })
+    }
   }
+
+  const postBase64TempFile = (url, headers, base64File) => postBase64File(url, headers, base64File)
+    .then(res => res.json())
+    .then(json => json.Path)
+}
+
+let uniqueFileNameIndex = 0
+function getUniqueFileName () {
+  return `File ${++uniqueFileNameIndex}`
 }
 
 export function emulatedCmsApi() {
@@ -63,6 +115,18 @@ export function emulatedCmsApi() {
     deleteExhibitorStaff(exhibitorId, userId) {
       return Promise.resolve()
     },
+    updateExhibitorImage(exhibitorId, base64File) {
+      return Promise.resolve()
+    },
+    addExhibitorFile(exhibitorId, base64File) {
+      return Promise.resolve()
+    },
+    renameExhibitorFile(exhibitorId, fileId, name) {
+      return Promise.resolve()
+    },
+    removeExhibitorFile(exhibitorId, fileId) {
+      return Promise.resolve()
+    }
   }
 }
 
