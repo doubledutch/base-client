@@ -84,7 +84,7 @@ async function getItemsOfType(type) {
   const lists = await get('lists/')
   const itemArrays = await Promise.all(lists.filter(x => x.Type === type).map(list => get(`lists/${lists.Id}/items`)))
   return Array.concat.apply(null, itemArrays)
-}  
+}
 
 export function emulatedApi() {
   return {
