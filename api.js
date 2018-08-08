@@ -198,7 +198,7 @@ const emulatedCustomItems = {
   }
 }
 
-const emulatedExhibitors = {
+export const emulatedExhibitors = {
   'EXH1': {
     Id: 'EXH1',
     ImageUrl: 'http://g-ec2.images-amazon.com/images/G/01/social/api-share/amazon_logo_500500.png',

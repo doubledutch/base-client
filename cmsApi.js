@@ -15,6 +15,7 @@
  */
 
 import { prettifyAttendee, prettifyExhibitor } from './transforms'
+import {emulatedExhibitors} from './api'
 
 export default function api(getToken, region, eventId, postBase64File) {
   const rootUrl = getRootUrl(region)
@@ -120,6 +121,9 @@ export function emulatedCmsApi() {
     },
     updateExhibitorImage(exhibitorId, base64File) {
       return Promise.resolve()
+    },
+    getFullExhibitor(exhibitorId) {
+      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     },
     addExhibitorFile(exhibitorId, base64File) {
       return Promise.resolve()
