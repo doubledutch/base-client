@@ -65,14 +65,26 @@ export default function api(getToken, rootUrl, eventId) {
     async getCustomItems() {
       return (await getItemsOfType('Regular')).map(prettifyCustomItem)
     },
+    async getCustomItem(id) {
+      return prettifyCustomItem(await getItem(id))
+    },
     async getExhibitors() {
       return (await getItemsOfType('Exhibitor')).map(prettifyExhibitor)
+    },
+    async getExhibitor(id) {
+      return prettifyExhibitor(await getItem(id))
     },
     async getSessions() {
       return (await getItemsOfType('Agenda')).map(prettifySession)
     },
+    async getSession(id) {
+      return prettifySession(await getItem(id))
+    },
     async getSpeakers() {
       return (await getItemsOfType('Speakers')).map(prettifySpeaker)
+    },
+    async getSpeaker(id) {
+      return prettifySpeaker(await getItem(id))
     },
     getSignedToken() {
       return get('users/me/token')
@@ -84,6 +96,10 @@ async function getItemsOfType(type) {
   const lists = await get('lists/')
   const itemArrays = await Promise.all(lists.filter(x => x.Type === type).map(list => get(`lists/${lists.Id}/items`)))
   return Array.concat.apply(null, itemArrays)
+}
+
+function getItem(id) {
+  return get(`items/${id}`).then(items => items[0])
 }
 
 export function emulatedApi() {
@@ -104,14 +120,26 @@ export function emulatedApi() {
     getCustomItems() {
       return Promise.resolve(Object.keys(emulatedCustomItems).map(id => prettifyCustomItem(emulatedCustomItems[id])))
     },
+    getCustomItem(id) {
+      return Promise.resolve(prettifyCustomItem(emulatedCustomItems[id]))
+    },
     getExhibitors() {
       return Promise.resolve(Object.keys(emulatedExhibitors).map(id => prettifyExhibitor(emulatedExhibitors[id])))
+    },
+    getExhibitor(id) {
+      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[id]))
     },
     getSessions() {
       return Promise.resolve(Object.keys(emulatedSessions).map(id => prettifySession(emulatedSessions[id])))
     },
+    getSessions(id) {
+      return Promise.resolve(prettifySession(emulatedSessions[id]))
+    },
     getSpeakers() {
       return Promise.resolve(Object.keys(emulatedSpeakers).map(id => prettifySpeaker(emulatedSpeakers[id])))
+    },
+    getSpeaker(id) {
+      return Promise.resolve(prettifySpeaker(emulatedSpeakers[id]))
     },
     getSignedToken() {
       return Promise.resolve('')
