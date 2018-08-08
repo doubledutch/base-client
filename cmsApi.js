@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { prettifyAttendee } from './transforms'
+import { prettifyAttendee, prettifyExhibitor } from './transforms'
 
 export default function api(getToken, region, eventId, postBase64File) {
   const rootUrl = getRootUrl(region)
@@ -61,6 +61,9 @@ export default function api(getToken, region, eventId, postBase64File) {
         })
       })
     },
+    getFullExhibitor(exhibitorId) {
+      return get(`${rootUrl}items/${exhibitorId}`).then(prettifyExhibitor)
+    },
     addExhibitorFile(exhibitorId, base64File) {
       return getToken()
       .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadfile`, {authorization: `Bearer ${token}`}, base64File))
@@ -106,7 +109,7 @@ function getUniqueFileName () {
 
 export function emulatedCmsApi() {
   return {
-    getExhibitorStaff() {
+    getExhibitorStaff(exhibitorId) {
       return Promise.resolve([])
     },
     createExhibitorStaff(exhibitorId, userId) {

@@ -34,7 +34,7 @@ export function prettifyAttendee(user) {
     linkedin: user.LinkedInId,
     facebook: user.FacebookUserId,
     exhibitorAdminId: user.ExhibitorAdminId,
-    exhibitorStaffId: user.exhibitorStaffId,
+    exhibitorStaffId: user.ExhibitorStaffId,
   })
 }
 
@@ -71,8 +71,9 @@ export function prettifyExhibitor(item) {
     facebook: item.FacebookUrl,
     linkedin: item.LinkedInUrl,
     twitter: item.Twitter,
-    email: item.EmailAddress,
-    phone: item.PhoneNumber
+    email: item.EmailAddress || item.Email,
+    phone: item.PhoneNumber || item.Phone,
+    files: item.Links ? item.Links.map(x => ({name: x.Name, id: x.Id, url: x.Url})) : undefined
   })
 }
 
