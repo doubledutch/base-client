@@ -104,14 +104,16 @@ function getItem(id) {
 
 export function emulatedApi() {
   return {
-    getUser(userId) {
+    getAttendee(userId) {
       userId = userId == null ? null : userId.toString()
       if (emulatedUsers[userId]) return Promise.resolve(emulatedUsers[userId]).then(prettifyAttendee)
       return Promise.reject(objectNotFound)
     },
-    getUsers() {
+    getAttendees() {
       return Promise.resolve(Object.keys(emulatedUsers).map(id => prettifyAttendee(emulatedUsers[id])))
     },
+    getUser() { throw new Error('getUser is deprecated. Please call getAttendee') },
+    getUsers() { throw new Error('getUsers is deprecated. Please call getAttendees') },
     getLeaderboardAttendees(count) {
       count = +count || 20
       const attendees = Object.keys(emulatedUsers).map(id => prettifyAttendee(emulatedUsers[id]))
@@ -159,7 +161,8 @@ const emulatedUsers = {
     Title: 'Character',
     Company: 'Les Misérables',
     TierId: 123,
-    TwitterUserName: 'lesmisofficial'
+    TwitterUserName: 'lesmisofficial',
+    ExhibitorAdminId: 'EXH1'
   },
   '1234': {
     Id: '1234',
@@ -170,7 +173,8 @@ const emulatedUsers = {
     FirstName: 'Cosette',
     LastName: 'Pontmercy',
     Title: 'Character',
-    Company: 'Les Misérables'
+    Company: 'Les Misérables',
+    ExhibitorStaffId: 'EXH1'
   },
   '5678': {
     Id: '5678',

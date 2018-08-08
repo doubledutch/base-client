@@ -32,7 +32,9 @@ export function prettifyAttendee(user) {
     tierId: user.TierId || 'default',
     twitter: user.TwitterUserName,
     linkedin: user.LinkedInId,
-    facebook: user.FacebookUserId
+    facebook: user.FacebookUserId,
+    exhibitorAdminId: user.ExhibitorAdminId,
+    exhibitorStaffId: user.exhibitorStaffId,
   })
 }
 
