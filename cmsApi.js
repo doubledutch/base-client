@@ -58,12 +58,19 @@ export default function api(getToken, region, eventId, postBase64File) {
         get(`items/${exhibitorId}`)
         .then(exhib => {
           exhib.ImageUrl = path
-          return put(`items/${exhibitorId}`, exhib)
+          return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
         })
       })
     },
     getFullExhibitor(exhibitorId) {
       return get(`${rootUrl}items/${exhibitorId}`).then(prettifyExhibitor)
+    },
+    updateExhibitorDescription(exhibitorId, description) {
+      get(`${rootUrl}items/${exhibitorId}`)
+      .then(exhib => {
+        exhib.Description = description
+        return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
+      })
     },
     addExhibitorFile(exhibitorId, base64File) {
       return getToken()
@@ -72,7 +79,7 @@ export default function api(getToken, region, eventId, postBase64File) {
         get(`items/${exhibitorId}`)
         .then(exhib => {
           exhib.Links.push({Name: getUniqueFileName(), Url: path})
-          return put(`items/${exhibitorId}`, exhib)
+          return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
         })
       })
     },
@@ -83,7 +90,7 @@ export default function api(getToken, region, eventId, postBase64File) {
         const link = exhib.Links.filter(x => x.Id == fileId)
         if (link) {
           link.Name = name
-          return put(`items/${exhibitorId}`, exhib)
+          return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
         }
         return Promise.reject(new Error('exhibitor link not found'))
       })
@@ -93,7 +100,7 @@ export default function api(getToken, region, eventId, postBase64File) {
       get(`items/${exhibitorId}`)
       .then(exhib => {
         exhib.Links = exhib.Links.filter(x => x.Id != fileId)
-        return put(`items/${exhibitorId}`, exhib)
+        return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
       })
     }
   }
@@ -120,19 +127,23 @@ export function emulatedCmsApi() {
       return Promise.resolve()
     },
     updateExhibitorImage(exhibitorId, base64File) {
-      return Promise.resolve()
+      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     },
     getFullExhibitor(exhibitorId) {
       return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     },
+    updateExhibitorDescription(exhibitorId, description) {
+      emulatedExhibitors[exhibitorId].Description = description
+      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
+    },
     addExhibitorFile(exhibitorId, base64File) {
-      return Promise.resolve()
+      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     },
     renameExhibitorFile(exhibitorId, fileId, name) {
-      return Promise.resolve()
+      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     },
     removeExhibitorFile(exhibitorId, fileId) {
-      return Promise.resolve()
+      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     }
   }
 }
