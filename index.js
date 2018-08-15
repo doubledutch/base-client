@@ -33,6 +33,9 @@ export default function makeClient(DD, postBase64File) {
   function getCurrentEvent() {
     return promisify(DD.getCurrentEvent || (cb => cb(null, DD.currentEvent))).then(prettifyEvent)
   }
+  function getPrimaryColor() {
+    return promisify(DD.getPrimaryColor || (cb => cb(null, DD.primaryColor)))
+  }
 
   const region = getRegion(DD.apiRootURL)
   const ddapi = DD.isEmulated ? emulatedApi() : api(getToken, DD.apiRootURL, DD.currentEvent.EventId)
@@ -51,6 +54,7 @@ export default function makeClient(DD, postBase64File) {
     openURL: DD.openURL,
     getCurrentUser,
     getCurrentEvent,
+    getPrimaryColor,
     logOut: DD.logOut,
     dismissLandingPage: DD.dismissLandingPage,
     _b: DD
