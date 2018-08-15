@@ -37,8 +37,8 @@ export function prettifyAttendee(user) {
     exhibitorStaffId: user.ExhibitorStaffId,
   })
 
-  if (user.ExhibitorAdminId) claims.exhibitorAdminId = `${user.ExhibitorAdminId}`
-  if (user.ExhibitorStaffId) claims.exhibitorStaffId = `${user.ExhibitorStaffId}`
+  if (user.ExhibitorAdminId) attendee.exhibitorAdminId = `${user.ExhibitorAdminId}`
+  if (user.ExhibitorStaffId) attendee.exhibitorStaffId = `${user.ExhibitorStaffId}`
 
   return attendee
 }
