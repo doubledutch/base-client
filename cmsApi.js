@@ -65,10 +65,10 @@ export default function api(getToken, region, eventId, postBase64File) {
     getFullExhibitor(exhibitorId) {
       return get(`${rootUrl}items/${exhibitorId}`).then(prettifyExhibitor)
     },
-    updateExhibitorDescription(exhibitorId, description) {
+    updateExhibitor(exhibitorId, updates) {
       get(`${rootUrl}items/${exhibitorId}`)
       .then(exhib => {
-        exhib.Description = description
+        updateExhibitorFields(exhib, updates)
         return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
       })
     },
@@ -132,9 +132,10 @@ export function emulatedCmsApi() {
     getFullExhibitor(exhibitorId) {
       return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     },
-    updateExhibitorDescription(exhibitorId, description) {
-      emulatedExhibitors[exhibitorId].Description = description
-      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
+    updateExhibitor(exhibitorId, updates) {
+      const exhib = emulatedExhibitors[exhibitorId]
+      updateExhibitorFields(exhib, updates)
+      return Promise.resolve(prettifyExhibitor(exhib))
     },
     addExhibitorFile(exhibitorId, base64File) {
       return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
@@ -146,6 +147,16 @@ export function emulatedCmsApi() {
       return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     }
   }
+}
+
+function updateExhibitorFields(exhib, {description, website, email, phone, facebook, linkedin, twitter}) {
+  if (description) exhib.Description = description
+  if (website) exhib.Website = website
+  if (facebook) exhib.FacebookUrl = facebook
+  if (linkedin) exhib.LinkedInUrl = linkedin
+  if (twitter) exhib.Twitter = twitter
+  if (email) exhib.Email = email
+  if (phone) exhib.Phone = phone
 }
 
 function getRootUrl(region) {

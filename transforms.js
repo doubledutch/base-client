@@ -17,7 +17,7 @@
 export function prettifyAttendee(user) {
   if (!user) return null
   const id = user.UserId || user.Id
-  return deleteUndefinedKeys({
+  const attendee = deleteUndefinedKeys({
     id: id && `${id}`,
     identifier: user.UserIdentifierId,
     firstName: user.FirstName,
@@ -36,6 +36,11 @@ export function prettifyAttendee(user) {
     exhibitorAdminId: user.ExhibitorAdminId,
     exhibitorStaffId: user.ExhibitorStaffId,
   })
+
+  if (user.ExhibitorAdminId) claims.exhibitorAdminId = `${user.ExhibitorAdminId}`
+  if (user.ExhibitorStaffId) claims.exhibitorStaffId = `${user.ExhibitorStaffId}`
+
+  return attendee
 }
 
 export function prettifyEvent(event) {
