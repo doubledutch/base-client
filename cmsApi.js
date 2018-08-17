@@ -21,7 +21,7 @@ export default function api(getToken, region, eventId, postBase64File) {
   const rootUrl = getRootUrl(region)
 
   function cmsApi(method, url, body) {
-    url = `${rootUrl}${url}${url.indexOf('?') < 0 ? '?' : '&'}currentapplicationid=${eventId}`
+    url = `${rootUrl}${url}${url.indexOf('?') < 0 ? '?' : '&'}currentApplicationId=${eventId}`
     return getToken()
     .then(token => fetch({
       url,
@@ -53,7 +53,7 @@ export default function api(getToken, region, eventId, postBase64File) {
     updateExhibitorImage(exhibitorId, base64File) {
       // Upload file, GET exhibitor, point to temp URL of uploaded image, PUT exhibitor.
       return getToken()
-      .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadimage`, {authorization: `Bearer ${token}`}, base64File))
+      .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadimage?currentApplicationId=${eventId}`, {authorization: `Bearer ${token}`}, base64File))
       .then(path => {
         get(`items/${exhibitorId}`)
         .then(exhib => {
@@ -63,10 +63,10 @@ export default function api(getToken, region, eventId, postBase64File) {
       })
     },
     getFullExhibitor(exhibitorId) {
-      return get(`${rootUrl}items/${exhibitorId}`).then(prettifyExhibitor)
+      return get(`items/${exhibitorId}`).then(prettifyExhibitor)
     },
     updateExhibitor(exhibitorId, updates) {
-      get(`${rootUrl}items/${exhibitorId}`)
+      get(`items/${exhibitorId}`)
       .then(exhib => {
         updateExhibitorFields(exhib, updates)
         return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
@@ -74,7 +74,7 @@ export default function api(getToken, region, eventId, postBase64File) {
     },
     addExhibitorFile(exhibitorId, base64File) {
       return getToken()
-      .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadfile`, {authorization: `Bearer ${token}`}, base64File))
+      .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadfile?currentApplicationId=${eventId}`, {authorization: `Bearer ${token}`}, base64File))
       .then(path => {
         get(`items/${exhibitorId}`)
         .then(exhib => {
