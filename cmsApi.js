@@ -40,6 +40,10 @@ export default function api(getToken, region, eventId, postBase64File) {
   const put = (url, body) => cmsApi('PUT', url, body)
   const del = (url, body) => cmsApi('DELETE', url, body)
 
+  const postBase64TempFile = (url, headers, base64File) => postBase64File(url, headers, base64File)
+    .then(res => res.json())
+    .then(json => json.Path)
+
   return {
     getExhibitorStaff(exhibitorId) {
       return get(`exhibitors/${exhibitorId}/staff`).then(attendees => attendees.map(prettifyAttendee))
@@ -104,10 +108,6 @@ export default function api(getToken, region, eventId, postBase64File) {
       })
     }
   }
-
-  const postBase64TempFile = (url, headers, base64File) => postBase64File(url, headers, base64File)
-    .then(res => res.json())
-    .then(json => json.Path)
 }
 
 let uniqueFileNameIndex = 0
