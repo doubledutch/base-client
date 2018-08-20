@@ -92,6 +92,13 @@ export default function api(getToken, region, eventId, postBase64File) {
         })
       })
     },
+    addExhibitorFileFromLink(exhibitorId, url, name) {
+      return get(`items/${exhibitorId}`)
+      .then(exhib => {
+        exhib.Links.push({Name: name || getUniqueFileName(), Url: url})
+        return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
+      })
+    },
     renameExhibitorFile(exhibitorId, fileId, name) {
       if (!fileId) return Promise.reject(new Error('file ID not specified'))
       get(`items/${exhibitorId}`)
@@ -143,6 +150,9 @@ export function emulatedCmsApi() {
       return Promise.resolve(prettifyExhibitor(exhib))
     },
     addExhibitorFile(exhibitorId, base64File) {
+      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
+    },
+    addExhibitorFileFromLink(exhibitorId, url, name) {
       return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     },
     renameExhibitorFile(exhibitorId, fileId, name) {
