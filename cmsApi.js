@@ -23,12 +23,17 @@ export default function api(getToken, region, eventId, postBase64File) {
   function cmsApi(method, url, body) {
     url = `${rootUrl}${url}${url.indexOf('?') < 0 ? '?' : '&'}currentApplicationId=${eventId}`
     return getToken()
-    .then(token => fetch({
-      url,
-      method,
-      body: body ? JSON.stringify(body) : undefined,
-      headers: {authorization: `Bearer ${token}`}
-    }))
+    .then(token => {
+      const fetchConfig = {
+        method,
+        headers: {
+          authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      }
+      if (body) fetchConfig.body = JSON.stringify(body)
+      return fetch(url, fetchConfig)
+    })
     .then(res => {
       if (!res.ok) throw new Error(res.status)
       return res.json()
@@ -59,7 +64,7 @@ export default function api(getToken, region, eventId, postBase64File) {
       return getToken()
       .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadimage?currentApplicationId=${eventId}`, {authorization: `Bearer ${token}`}, base64File))
       .then(path => {
-        get(`items/${exhibitorId}`)
+        return get(`items/${exhibitorId}`)
         .then(exhib => {
           exhib.ImageUrl = path
           return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
