@@ -58,7 +58,7 @@ export function prettifyEvent(event) {
 export function prettifyCustomItem(item) {
   if (!item) return null
   return deleteUndefinedKeys({
-    id: item.Id,
+    id: `${item.Id}`,
     name: item.Name,
     image: item.ImageUrl,
     description: item.Description
@@ -68,7 +68,7 @@ export function prettifyCustomItem(item) {
 export function prettifyExhibitor(item) {
   if (!item) return null
   return deleteUndefinedKeys({
-    id: item.Id,
+    id: `${item.Id}`,
     name: item.Name,
     image: item.ImageUrl,
     description: item.Description,
@@ -85,7 +85,7 @@ export function prettifyExhibitor(item) {
 export function prettifySpeaker(item) {
   if (!item) return null
   return deleteUndefinedKeys({
-    id: item.Id,
+    id: `${item.Id}`,
     firstName: item.FirstName,
     lastName: item.LastName,
     image: item.ImageUrl,
@@ -102,7 +102,7 @@ export function prettifySpeaker(item) {
 export function prettifySession(item) {
   if (!item) return null
   return deleteUndefinedKeys({
-    id: item.Id,
+    id: `${item.Id}`,
     name: item.Name,
     image: item.ImageUrl,
     description: item.Description,
