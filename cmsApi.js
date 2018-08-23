@@ -15,7 +15,7 @@
  */
 
 import { prettifyAttendee, prettifyExhibitor } from './transforms'
-import {emulatedExhibitors} from './api'
+import {emulatedExhibitors, emulatedUsers} from './api'
 
 export default function api(getToken, region, eventId, postBase64File) {
   const rootUrl = getRootUrl(region)
@@ -53,11 +53,14 @@ export default function api(getToken, region, eventId, postBase64File) {
     getExhibitorStaff(exhibitorId) {
       return get(`exhibitors/${exhibitorId}/staff`).then(attendees => attendees.map(prettifyAttendee))
     },
-    createExhibitorStaff(exhibitorId, userId) {
-      return post(`exhibitors/${exhibitorId}/staff`, userId)
+    createExhibitorStaff(exhibitorId, attendeeId) {
+      return post(`exhibitors/${exhibitorId}/staff`, attendeeId)
     },
-    deleteExhibitorStaff(exhibitorId, userId) {
-      return del(`exhibitors/${exhibitorId}/staff`, userId)
+    deleteExhibitorStaff(exhibitorId, attendeeId) {
+      return del(`exhibitors/${exhibitorId}/staff`, attendeeId)
+    },
+    getAttendeeForExhibitor(exhibitorId, attendeeId) {
+      return get(`users/${attendeeId}/forexhibitor/${exhibitorId}`).then(prettifyAttendee)
     },
     updateExhibitorImage(exhibitorId, base64File) {
       // Upload file, GET exhibitor, point to temp URL of uploaded image, PUT exhibitor.
@@ -137,6 +140,9 @@ export function emulatedCmsApi() {
     },
     deleteExhibitorStaff(exhibitorId, userId) {
       return Promise.resolve()
+    },
+    getAttendeeForExhibitor(exhibitorId, attendeeId) {
+      return Promise.resolve(prettifyAttendee(emulatedUsers[attendeeId]))
     },
     updateExhibitorImage(exhibitorId, base64File) {
       return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))

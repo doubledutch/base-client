@@ -149,7 +149,7 @@ export function emulatedApi() {
   }
 }
 
-const emulatedUsers = {
+export const emulatedUsers = {
   '24601': {
     Id: '24601',
     ImageUrl: 'https://images.amcnetworks.com/bbcamerica.com/wp-content/blogs.dir/55/files/2012/12/Hugh-Jackman-Les-Miserables.jpg',
