@@ -44,19 +44,16 @@ export default function makeClient(DD, postBase64File) {
   const client = {
     ...ddCmsApi,  // merge all the functions that expose the mobile and CMS APIs
     ...ddapi,     // to this `client` object.
-    currentEvent: prettifyEvent(DD.currentEvent),
-    currentUser: prettifyAttendee(DD.currentUser),
-    primaryColor: DD.primaryColor,
-    region,
-    setTitle: DD.setTitle,
-    getToken,
-    refreshToken,
-    openURL: DD.openURL,
+    dismissLandingPage: DD.dismissLandingPage,
     getCurrentUser,
     getCurrentEvent,
     getPrimaryColor,
+    getToken,
     logOut: DD.logOut,
-    dismissLandingPage: DD.dismissLandingPage,
+    openURL: DD.openURL,
+    refreshToken,
+    region,
+    setTitle: DD.setTitle,
     _b: DD
   }
 
