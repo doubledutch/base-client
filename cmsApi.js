@@ -84,13 +84,13 @@ export default function api(getToken, region, eventId, postBase64File) {
         return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
       })
     },
-    addExhibitorFile(exhibitorId, base64File) {
+    addExhibitorFile(exhibitorId, base64File, name) {
       return getToken()
       .then(token => postBase64TempFile(`${rootUrl}items/${exhibitorId}/uploadfile?currentApplicationId=${eventId}`, {authorization: `Bearer ${token}`}, base64File))
       .then(path => {
         get(`items/${exhibitorId}`)
         .then(exhib => {
-          exhib.Links.push({Name: getUniqueFileName(), Url: path})
+          exhib.Links.push({Name: name || getUniqueFileName(), Url: path})
           return put(`items/${exhibitorId}`, exhib).then(prettifyExhibitor)
         })
       })
@@ -155,7 +155,7 @@ export function emulatedCmsApi() {
       updateExhibitorFields(exhib, updates)
       return Promise.resolve(prettifyExhibitor(exhib))
     },
-    addExhibitorFile(exhibitorId, base64File) {
+    addExhibitorFile(exhibitorId, base64File, name) {
       return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
     },
     addExhibitorFileFromLink(exhibitorId, url, name) {
