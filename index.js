@@ -44,6 +44,7 @@ export default function makeClient(DD, postBase64File) {
   const client = {
     ...ddCmsApi,  // merge all the functions that expose the mobile and CMS APIs
     ...ddapi,     // to this `client` object.
+    clientVersion: getClientVersion(DD.clientVersion),
     dismissLandingPage: DD.dismissLandingPage,
     getCurrentUser,
     getCurrentEvent,
@@ -71,4 +72,10 @@ function getRegion(apiRoot) {
   if (apiRoot.startsWith('https://api.eu.doubledutch.me')) return 'eu'
   if (apiRoot.startsWith('https://qa.api.doubledutch.me')) return 'qa'
   if (apiRoot.startsWith('https://purple.api.doubledutch.me')) return 'purple'
+}
+
+function getClientVersion(versionString) {
+  const parseVersion = s => (s || '8.1.0').split('.').map(v => +v)
+  const [major, minor, revision] = parseVersion(versionString)
+  return { major, minor, revision }
 }
