@@ -25,7 +25,6 @@ export function prettifyAttendee(user) {
     title: user.Title,
     company: user.Company,
     email: user.EmailAddress,
-    username: user.UserName,
     image: user.ImageUrl,
     score: user.Score,
     userGroupIds: (typeof user.UserGroups === 'string')
