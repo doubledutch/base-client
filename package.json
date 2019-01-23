@@ -1,6 +1,6 @@
 {
   "name": "@doubledutch/base-client",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Base DoubleDutch client upon which React Native, etc. clients are built",
   "main": "index.js",
   "scripts": {

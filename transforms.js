@@ -28,7 +28,9 @@ export function prettifyAttendee(user) {
     username: user.UserName,
     image: user.ImageUrl,
     score: user.Score,
-    userGroupIds: user.UserGroups || [],
+    userGroupIds: (typeof user.UserGroups === 'string')
+      ? user.UserGroups.split(',').map(g => +g) 
+      : (user.UserGroups || []),
     tierId: user.TierId || 'default',
     twitter: user.TwitterUserName,
     linkedin: user.LinkedInId,
