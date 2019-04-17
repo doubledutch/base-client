@@ -145,7 +145,9 @@ export function emulatedCmsApi() {
       return Promise.resolve(prettifyAttendee(emulatedUsers[attendeeId]))
     },
     updateExhibitorImage(exhibitorId, base64File) {
-      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
+      const exhibitor = emulatedExhibitors[exhibitorId]
+      exhibitor.ImageUrl = `data:image/jpeg;base64,${base64File}`
+      return Promise.resolve(prettifyExhibitor(exhibitor))
     },
     getFullExhibitor(exhibitorId) {
       return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
@@ -156,17 +158,29 @@ export function emulatedCmsApi() {
       return Promise.resolve(prettifyExhibitor(exhib))
     },
     addExhibitorFile(exhibitorId, base64File, name) {
-      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
+      const exhib = emulatedExhibitors[exhibitorId]
+      exhib.Links.push({
+        Id: 'FILE' + Math.random(),
+        Name: name,
+        Url: `data:application/octet-stream;base64,${base64File}`,
+      })
+      return Promise.resolve(prettifyExhibitor(exhib))
     },
     addExhibitorFileFromLink(exhibitorId, url, name) {
-      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
+      const exhib = emulatedExhibitors[exhibitorId]
+      exhib.Links.push({ Id: 'LINK' + Math.random(), Name: name, Url: url })
+      return Promise.resolve(prettifyExhibitor(exhib))
     },
     renameExhibitorFile(exhibitorId, fileId, name) {
-      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
+      const exhib = emulatedExhibitors[exhibitorId]
+      exhib.Links.filter(f => f.Id === fileId).forEach(f => (f.Name = name))
+      return Promise.resolve(prettifyExhibitor(exhib))
     },
     removeExhibitorFile(exhibitorId, fileId) {
-      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[exhibitorId]))
-    }
+      const exhib = emulatedExhibitors[exhibitorId]
+      exhib.Links = exhib.Links.filter(f => f.Id !== fileId)
+      return Promise.resolve(prettifyExhibitor(exhib))
+    },
   }
 }
 

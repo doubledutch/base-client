@@ -102,6 +102,7 @@ function getItem(id) {
   return get(`items/${id}`).then(items => items[0])
 }
 
+const withoutLinks = exh => ({...exh, Links: undefined})
 export function emulatedApi() {
   return {
     getAttendee(userId) {
@@ -126,10 +127,10 @@ export function emulatedApi() {
       return Promise.resolve(prettifyCustomItem(emulatedCustomItems[id]))
     },
     getExhibitors() {
-      return Promise.resolve(Object.keys(emulatedExhibitors).map(id => prettifyExhibitor(emulatedExhibitors[id])))
+      return Promise.resolve(Object.keys(emulatedExhibitors).map(id => prettifyExhibitor(withoutLinks(emulatedExhibitors[id]))))
     },
     getExhibitor(id) {
-      return Promise.resolve(prettifyExhibitor(emulatedExhibitors[id]))
+      return Promise.resolve(prettifyExhibitor(withoutLinks(emulatedExhibitors[id])))
     },
     getSessions() {
       return Promise.resolve(Object.keys(emulatedSessions).map(id => prettifySession(emulatedSessions[id])))
@@ -209,7 +210,8 @@ export const emulatedExhibitors = {
     LinkedInUrl: 'https://www.linkedin.com/company/1586/',
     Twitter: 'amazon',
     EmailAddress: 'support@amazon.com',
-    PhoneNumber: '555-5555'
+    PhoneNumber: '555-5555',
+    Links: [{Name: 'White paper', Id: 4, Url: 'https://www.amazon.com/white-paper/s?k=white+paper'}]
   }
 }
 
