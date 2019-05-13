@@ -22,8 +22,7 @@ export default function api(getToken, rootUrl, eventId) {
   function mobileApi(method, url, body) {
     url = `${rootUrl}${url}${url.indexOf('?') < 0 ? '?' : '&'}isbundlecredentials=true&applicationid=${eventId}`
     return getToken()
-    .then(token => fetch({
-      url,
+    .then(token => fetch(url, {
       method,
       body,
       headers: {
